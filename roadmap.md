@@ -1,3 +1,3 @@
-- [ ] Build CampusFlow's shared design system, navigation, footer and realistic mock data.
-- [ ] Build home, events, resources, clubs, announcements, directory and grouped search pages with usable frontend interactions.
-- [ ] Add page-specific SEO, accessibility and responsive checks; keep the README as concise project documentation without the prompt.
+- [x] Build CampusFlow's shared design system, navigation, footer and realistic mock data.
+- [x] Build home, events, resources, clubs, announcements, directory and grouped search pages with usable frontend interactions.
+- [x] Add page-specific SEO, accessibility and responsive checks; keep the README as concise project documentation without the prompt.
