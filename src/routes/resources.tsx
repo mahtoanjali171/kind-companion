@@ -1,0 +1,8 @@
+import { createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
+import { ResourceCard, EmptyState, CategoryFilter } from '@/components/campus/cards';
+import { PageHeader } from '@/components/campus/layout';
+import { pageHead } from '@/components/campus/seo';
+import { resources } from '@/data/campus';
+export const Route=createFileRoute('/resources')({head:()=>pageHead('Study Resources','Find notes, previous year questions, tutorials and more study resources.','/resources'),component:ResourcesPage});
+function ResourcesPage(){const [query,setQuery]=useState('');const [category,setCategory]=useState('All');const filtered=resources.filter(r=>(category==='All'||r.category===category)&&`${r.title} ${r.subject} ${r.description}`.toLowerCase().includes(query.toLowerCase()));return <><PageHeader eyebrow="The learning library" title="Good resources. Better learning." description="From lecture notes to placement prep, find a helpful starting point for your next study session."/><main className="page-wrap py-10"><input aria-label="Search resources" type="search" placeholder="Search by topic, subject or resource..." value={query} onChange={e=>setQuery(e.target.value)} className="field mb-5 max-w-xl"/><CategoryFilter categories={['Notes','Previous Year Questions','Tutorials','Lab Resources','E-books','Placement Preparation']} active={category} onChange={setCategory}/><p className="my-6 text-sm text-muted-foreground">{filtered.length} resources found</p>{filtered.length?<div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{filtered.map(item=><ResourceCard key={item.id} item={item}/>)}</div>:<EmptyState query={query}/>}</main></>}
