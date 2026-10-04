@@ -1,24 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
-  component: Index,
-});
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { ArrowRight, ArrowUpRight, Search, CalendarDays, BookOpen, Users, Bell, MapPin } from 'lucide-react';
+import { type FormEvent } from 'react';
+import { Button } from '@/components/ui/button';
+import { EventCard, ResourceCard, ClubCard, AnnouncementCard, SectionHeading, quickLinks } from '@/components/campus/cards';
+import { events, resources, clubs, announcements } from '@/data/campus';
+import { pageHead } from '@/components/campus/seo';
+import hero from '@/assets/campus-hero.jpg';
+export const Route=createFileRoute('/')({head:()=>pageHead('Your Smart Campus Assistant','CampusFlow helps students discover campus events, resources, clubs, announcements and essential college information in one place.','/'),component:Index});
+function Index(){const navigate=useNavigate();function search(e:FormEvent<HTMLFormElement>){e.preventDefault();navigate({to:'/search',search:{q:new FormData(e.currentTarget).get('q')?.toString()||''}})}return <main><section className="relative min-h-[540px] overflow-hidden bg-secondary sm:min-h-[570px]"><img src={hero} width={1600} height={900} fetchPriority="high" alt="Students walking together through a green university campus" className="absolute inset-0 h-full w-full object-cover object-[65%_center]"/><div className="absolute inset-0 bg-hero-overlay"/><div className="relative mx-auto flex min-h-[540px] max-w-7xl items-center px-5 py-16 sm:min-h-[570px] sm:px-8"><div className="max-w-xl"><span className="mb-6 inline-flex items-center gap-2 rounded bg-background/90 px-3 py-1.5 text-xs font-semibold text-foreground"><span className="size-2 rounded-full bg-highlight"/> YOUR CAMPUS, CONNECTED</span><h1 className="font-display text-4xl font-semibold leading-tight text-hero-foreground sm:text-5xl lg:text-6xl">Everything you need on campus.</h1><p className="mt-5 max-w-lg text-base leading-relaxed text-hero-foreground/90 sm:text-lg">Your one place for what’s happening, what’s important and what’s next. Make the most of every day here.</p><div className="mt-7 flex flex-wrap gap-3"><Button asChild size="lg" className="h-11"><Link to="/directory">Explore Campus <ArrowRight/></Link></Button><Button asChild size="lg" variant="heroOutline" className="h-11"><Link to="/events">Browse Events</Link></Button></div></div></div></section><div className="border-b border-border bg-background"><div className="page-wrap grid gap-5 py-6 md:grid-cols-[230px_1fr] md:items-center"><div><p className="text-xs font-semibold uppercase text-primary">Find your way</p><p className="mt-1 font-display text-lg font-semibold">What are you looking for?</p></div><form onSubmit={search} role="search" className="flex gap-2"><label className="sr-only" htmlFor="home-search">Search campus resources</label><div className="relative min-w-0 flex-1"><Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={18}/><input id="home-search" name="q" placeholder="Search campus resources..." className="field pl-11"/></div><Button type="submit" className="h-11 px-5">Search</Button></form></div></div><section className="page-wrap py-14"><SectionHeading eyebrow="All in one place" title="Explore campus life"/><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">{[{name:'Events',icon:CalendarDays,to:'/events' as const,count:'What’s on campus'},{name:'Resources',icon:BookOpen,to:'/resources' as const,count:'Learn at your pace'},{name:'Clubs',icon:Users,to:'/clubs' as const,count:'Find your people'},{name:'Updates',icon:Bell,to:'/announcements' as const,count:'Never miss a thing'},{name:'Directory',icon:MapPin,to:'/directory' as const,count:'Know your campus'}].map(x=><Link to={x.to} key={x.name} className="group rounded-lg border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-card"><x.icon size={23} className="text-primary"/><div className="mt-7 flex items-center justify-between"><h3 className="font-display text-lg font-semibold">{x.name}</h3><ArrowUpRight size={17} className="text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/></div><p className="mt-1 text-xs text-muted-foreground">{x.count}</p></Link>)}</div></section><section className="bg-secondary/60 py-14"><div className="page-wrap"><SectionHeading eyebrow="Mark your calendar" title="Upcoming events" to="/events" linkLabel="All events"/><div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{events.slice(0,3).map(item=><EventCard key={item.id} item={item}/>)}</div></div></section><section className="page-wrap grid gap-12 py-14 lg:grid-cols-[1.4fr_1fr]"><div><SectionHeading eyebrow="Campus bulletin" title="Latest announcements" to="/announcements" linkLabel="All updates"/><div className="grid gap-4">{announcements.slice(0,3).map(item=><AnnouncementCard key={item.id} item={item}/>)}</div></div><div><SectionHeading eyebrow="At your fingertips" title="Campus quick links"/><div className="divide-y divide-border border-y border-border">{quickLinks.map(link=><Link key={link.to} to={link.to} className="group flex items-center justify-between py-5"><div><h3 className="font-medium group-hover:text-primary">{link.label}</h3><p className="mt-1 text-xs text-muted-foreground">{link.description}</p></div><ArrowUpRight size={20} className="text-primary"/></Link>)}</div></div></section><section className="bg-secondary/60 py-14"><div className="page-wrap"><SectionHeading eyebrow="Study smarter" title="Popular resources" to="/resources" linkLabel="Browse library"/><div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{resources.slice(0,3).map(item=><ResourceCard key={item.id} item={item}/>)}</div></div></section><section className="page-wrap py-14"><SectionHeading eyebrow="Find your community" title="Student clubs" to="/clubs" linkLabel="Explore clubs"/><div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{clubs.slice(0,3).map(item=><ClubCard key={item.id} item={item}/>)}</div></section></main>}
