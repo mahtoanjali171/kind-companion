@@ -26,7 +26,6 @@
   --color-ring: var(--ring);
   --color-highlight: var(--highlight);
   --color-hero-foreground: var(--hero-foreground);
-  --color-hero-overlay: var(--hero-overlay);
   --color-footer: var(--footer);
   --color-footer-foreground: var(--footer-foreground);
   --color-footer-muted: var(--footer-muted);
@@ -71,5 +70,6 @@
   html { scroll-behavior: smooth; }
 }
 @utility page-wrap { width: 100%; max-width: 80rem; margin-inline: auto; padding-inline: 1.25rem; @media (min-width: 640px) { padding-inline: 2rem; } }
+@utility bg-hero-overlay { background-image: var(--hero-overlay); }
 @utility field { height: 2.75rem; width: 100%; border: 1px solid var(--input); border-radius: 6px; background: var(--background); padding-inline: 1rem; font-size: 0.875rem; outline: none; &:focus-visible { box-shadow: 0 0 0 2px var(--ring); } &::placeholder { color: var(--muted-foreground); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
